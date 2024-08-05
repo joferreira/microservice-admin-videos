@@ -15,4 +15,5 @@ yarn-error.log
 /.vscode
 .bash_history
 .docker/dbdata/
-.composer
+/.composer
+/.vscode-server
