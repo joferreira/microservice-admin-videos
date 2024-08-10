@@ -2,9 +2,15 @@
 
 namespace App\Providers;
 
-use App\Repositories\Eloquent\CategoryEloquentRepository;
+use App\Repositories\Eloquent\{
+    CategoryEloquentRepository,
+    GenreEloquentRepository
+};
 use App\Repositories\Transaction\DBTransaction;
-use Core\Domain\Repository\CategoryRepositoryInterface;
+use Core\Domain\Repository\{
+    CategoryRepositoryInterface,
+    GenreRepositoryInterface
+};
 use Core\UseCase\Interfaces\TransactionInterface;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(
             CategoryRepositoryInterface::class,
             CategoryEloquentRepository::class
+        );
+        $this->app->singleton(
+            GenreRepositoryInterface::class,
+            GenreEloquentRepository::class
         );
 
         /**
