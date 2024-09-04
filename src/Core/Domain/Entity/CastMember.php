@@ -2,16 +2,13 @@
 
 namespace Core\Domain\Entity;
 
-use Core\Domain\Entity\Traits\MethodsMagicsTrait;
 use Core\Domain\Enum\CastMemberType;
 use Core\Domain\Validation\DomainValidation;
 use Core\Domain\ValueObject\Uuid;
 use DateTime;
 
-class CastMember
+class CastMember extends Entity
 {
-    use MethodsMagicsTrait;
-
     public function __construct(
         protected string $name,
         protected CastMemberType $type,

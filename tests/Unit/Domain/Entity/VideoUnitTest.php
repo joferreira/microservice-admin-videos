@@ -217,7 +217,7 @@ class VideoUnitTest extends TestCase
 
         $this->assertNotNull($entity->thumbFile());
         $this->assertInstanceOf(Image::class, $entity->thumbFile());
-        $this->assertEquals('sslsl/image-filmex.png', $entity->thumbFile()->path());
+        $this->assertEquals('sslsl/image-filmex.png', $entity->thumbFile()->filePath);
     }
     public function testValueObjectImageToThumbHalf()
     {
@@ -233,7 +233,7 @@ class VideoUnitTest extends TestCase
 
         $this->assertNotNull($entity->thumbHalf());
         $this->assertInstanceOf(Image::class, $entity->thumbHalf());
-        $this->assertEquals('sslsl/image-filmex.png', $entity->thumbHalf()->path());
+        $this->assertEquals('sslsl/image-filmex.png', $entity->thumbHalf()->filePath);
     }
     public function testValueObjectImageToBannerFile()
     {
@@ -249,7 +249,7 @@ class VideoUnitTest extends TestCase
 
         $this->assertNotNull($entity->bannerFile());
         $this->assertInstanceOf(Image::class, $entity->bannerFile());
-        $this->assertEquals('sslsl/image-filmex.png', $entity->bannerFile()->path());
+        $this->assertEquals('sslsl/image-filmex.png', $entity->bannerFile()->filePath);
     }
 
     public function testValueObjectMediaTrailer()

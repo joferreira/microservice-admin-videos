@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\CastMember as Model;
 use App\Repositories\Presenters\PaginationPresenter;
 use Core\Domain\Entity\CastMember;
+use Core\Domain\Entity\Entity;
 use Core\Domain\Enum\CastMemberType;
 use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CastMemberRepositoryInterface;
@@ -19,7 +20,7 @@ class CastMemberEloquentRepository implements CastMemberRepositoryInterface
         $this->model = $model;
     }
 
-    public function insert(CastMember $castMember): CastMember
+    public function insert(Entity $castMember): Entity
     {
         $modelDb = $this->model->create([
             'id' => $castMember->id(),
@@ -39,6 +40,15 @@ class CastMemberEloquentRepository implements CastMemberRepositoryInterface
 
         return $this->convertToEntity($modelDb);
     }
+
+    public function getIdsListIds(array $castMembersIds = []): array
+    {
+        return $this->model
+            ->whereIn('id', $castMembersIds)
+            ->pluck('id')
+            ->toArray();
+    }
+
     public function findAll(string $filter = '', $order = 'DESC'): array
     {
         $dataDb = $this->model
@@ -65,7 +75,7 @@ class CastMemberEloquentRepository implements CastMemberRepositoryInterface
         return new PaginationPresenter($dataDb);
     }
 
-    public function update(CastMember $castMember): CastMember
+    public function update(Entity $castMember): Entity
     {
         if (!$dataDb = $this->model->find($castMember->id())) {
             throw new NotFoundException("Cast Member {$castMember->id()} not found");

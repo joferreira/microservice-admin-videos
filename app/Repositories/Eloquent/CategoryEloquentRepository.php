@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Category AS Model;
 use App\Repositories\Presenters\PaginationPresenter;
 use Core\Domain\Entity\Category;
+use Core\Domain\Entity\Entity;
 use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\CategoryRepositoryInterface;
 use Core\Domain\Repository\PaginationInterface;
@@ -16,7 +17,7 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
     {
         $this->model = $category;
     }
-    public function insert(Category $category): Category
+    public function insert(Entity $category): Entity
     {
         $category = $this->model->create([
             'id' => $category->id(),
@@ -67,7 +68,7 @@ class CategoryEloquentRepository implements CategoryRepositoryInterface
 
         return new PaginationPresenter($paginator);
     }
-    public function update(Category $category): Category
+    public function update(Entity $category): Entity
     {
         if (!$categoryDb = $this->model->find($category->id)){
             throw new NotFoundException('Category not found');

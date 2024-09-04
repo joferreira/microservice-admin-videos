@@ -5,12 +5,12 @@ namespace Core\Domain\ValueObject;
 class Image
 {
     public function __construct(
-        protected string $path
+        protected string $filePath
     ) {}
 
-    public function path(): string
+    public function __get($property)
     {
-        return $this->path;
+        return $this->{$property};
     }
 
 }

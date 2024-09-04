@@ -3,7 +3,6 @@
 namespace Core\Domain\ValueObject;
 
 use Core\Domain\Enum\MediaStatus as EnumMediaStatus;
-use Exception;
 
 class Media 
 {
