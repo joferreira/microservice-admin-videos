@@ -2,7 +2,6 @@
 
 namespace Core\UseCase\Video;
 
-use Core\Domain\Builder\Video\BuilderVideo;
 use Core\Domain\Enum\MediaStatus;
 use Core\Domain\Events\VideoCreatedEvent;
 use Core\Domain\Exception\NotFoundException;
@@ -16,11 +15,12 @@ use Core\UseCase\Interfaces\{
     FileStorageInterface,
     TransactionInterface
 };
+use Core\Domain\Builder\Video\Builder;
 use Core\UseCase\Video\Interfaces\VideoEventManagerInterface;
 
 abstract class BaseVideoUseCase
 {
-    protected BuilderVideo $builder;
+    protected Builder $builder;
 
     public function __construct(
         protected VideoRepositoryInterface $repository,
@@ -32,16 +32,18 @@ abstract class BaseVideoUseCase
         protected GenreRepositoryInterface $repositoryGenre,
         protected CastMemberRepositoryInterface $repositoryCastMember,
     ) {
-        $this->builder = new BuilderVideo();
+        $this->builder = $this->getBuilder();
     }
+
+    abstract protected function getBuilder(): Builder;
 
     protected function storageFiles(object $input): void
     {
-        $path = $this->builder->getEntity()->id();
-
+        $entity =  $this->builder->getEntity();
+        $path = $entity->id();
         if ($pathVideoFile = $this->storageFile($path, $input->videoFile)) {
             $this->builder->addMediaVideo($pathVideoFile, MediaStatus::PROCESSING);
-            $this->eventManager->dispatch(new VideoCreatedEvent($this->builder->getEntity()));
+            $this->eventManager->dispatch(new VideoCreatedEvent($entity));
         }
 
         if ($pathTraillerFile = $this->storageFile($path, $input->trailerFile)) {
@@ -85,7 +87,7 @@ abstract class BaseVideoUseCase
     protected function storageFile(string $path, ?array $media = null): null|string
     {
         if ($media) {
-            $this->storage->store(
+            return $this->storage->store(
                 path: $path,
                 file: $media,
             );
@@ -94,7 +96,7 @@ abstract class BaseVideoUseCase
         return null;
     }
 
-    protected function validateIds(array $ids = [], $repository,  string $singularLabel, ?string $pluralLabel = null): void
+    protected function validateIds(array $ids, $repository,  string $singularLabel, ?string $pluralLabel = null): void
     {
         $idsDb = $repository->getIdsListIds($ids);
 

@@ -9,8 +9,8 @@ use DateTime;
 class Category extends Entity
 {   
     public function __construct(
+        protected string $name,
         protected Uuid|string $id = '',
-        protected string $name, 
         protected string $description = '',
         protected bool $isActive = true,
         protected DateTime|string $createdAt = '',

@@ -22,8 +22,8 @@ class CreateUseCaseCategoryUnitTest extends TestCase
         $categoryName = 'name cat';
 
         $this->mockEntity = Mockery::mock(Category::class, [
-            $uuid,
             $categoryName,
+            $uuid,
         ]);
 
         $this->mockEntity->shouldReceive('id')->andReturn($uuid);

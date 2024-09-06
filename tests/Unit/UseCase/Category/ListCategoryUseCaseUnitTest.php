@@ -19,8 +19,8 @@ class ListCategoryUseCaseUnitTest extends TestCase
         $id = (string) Uuid::uuid4()->toString();
 
         $this->mockEntity = Mockery::mock(Category::class, [
-            $id,
             'teste category',
+            $id,
         ]);
 
         $this->mockEntity->shouldReceive('id')->andReturn($id);

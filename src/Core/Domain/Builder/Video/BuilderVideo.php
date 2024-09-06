@@ -9,7 +9,7 @@ use Core\Domain\ValueObject\Media;
 
 class BuilderVideo implements Builder
 {
-    private ?Entity $entity = null;
+    protected ?Entity $entity = null;
 
     public function __construct()
     {
@@ -76,7 +76,7 @@ class BuilderVideo implements Builder
     public function addThumb(string $path): Builder
     {
         $this->entity->setThumbFile(new Image(
-            filePath: $path,
+            path: $path,
         ));
 
         return $this;
@@ -85,7 +85,7 @@ class BuilderVideo implements Builder
     public function addThumbHalf(string $path): Builder
     {
         $this->entity->setThumbHalf(new Image(
-            filePath: $path,
+            path: $path,
         ));
 
         return $this;
@@ -94,7 +94,7 @@ class BuilderVideo implements Builder
     public function addBanner(string $path): Builder
     {
         $this->entity->setBannerFile(new Image(
-            filePath: $path,
+            path: $path,
         ));
 
         return $this;
