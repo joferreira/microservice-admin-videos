@@ -2,27 +2,34 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Enums\ImageTypes;
+use App\Enums\MediaTypes;
 use App\Models\Video as Model;
+use App\Repositories\Eloquent\Traits\VideoTrait;
 use App\Repositories\Presenters\PaginationPresenter;
+use Core\Domain\Builder\Video\UpdateVideoBuilder;
 use Core\Domain\Entity\{
     Entity,
     Video as VideoEntity
 };
+use Core\Domain\Enum\MediaStatus;
 use Core\Domain\Enum\Rating;
 use Core\Domain\Exception\NotFoundException;
 use Core\Domain\Repository\PaginationInterface;
 use Core\Domain\Repository\VideoRepositoryInterface;
+use Core\Domain\ValueObject\{
+    Image as ValueObjectImage,
+    Media as ValueObjectMedia
+};
 use Core\Domain\ValueObject\Uuid;
 
 class VideoEloquentRepository implements VideoRepositoryInterface
 {
-    protected $model;
+    use VideoTrait;
+    
     public function __construct(
-        Model $model
-    )
-    {   
-        $this->model = $model;
-    }
+        protected Model $model
+    ) {}
 
     public function insert(Entity $entity): Entity
     {
@@ -109,7 +116,19 @@ class VideoEloquentRepository implements VideoRepositoryInterface
     }
 
     public function updateMedia(Entity $entity): Entity
-    {}
+    {
+        if (!$entityDb = $this->model->find($entity->id())) {
+            throw new NotFoundException('Video not found');
+        }
+
+        $this->updateMediaVideo($entity, $entityDb);
+        $this->updateMediaTrailer($entity, $entityDb);
+        $this->updateImageBanner($entity, $entityDb);
+        $this->updateImageThumb($entity, $entityDb);
+        $this->updateImageThumbHalf($entity, $entityDb);
+
+        return $this->convertObjectToEntity($entityDb);
+    }
 
     protected function syncRelationships(Model $model, Entity $entity): void
     {
@@ -142,6 +161,33 @@ class VideoEloquentRepository implements VideoRepositoryInterface
             $entity->addCastMember($castMember->id);
         }
 
-        return $entity;
+        $builder = (new UpdateVideoBuilder())
+                        ->setEntity($entity);
+
+        if ($mediaVideo = $model->media) {
+            $builder->addMediaVideo(
+                path: $mediaVideo->file_path,
+                mediaStatus: MediaStatus::from($mediaVideo->media_status),
+                encodedPath: $mediaVideo->encoded_path,
+            );
+        }
+
+        if ($trailer = $model->trailer) {
+            $builder->addTrailer($trailer->file_path);
+        }
+
+        if ($banner = $model->banner) {
+            $builder->addBanner($banner->path);
+        }
+
+        if ($thumb = $model->thumb) {
+            $builder->addThumb($thumb->path);
+        }
+
+        if ($thumbHalf = $model->thumbHalf) {
+            $builder->addThumbHalf($thumbHalf->path);
+        }
+
+        return $builder->getEntity();
     }
 }   

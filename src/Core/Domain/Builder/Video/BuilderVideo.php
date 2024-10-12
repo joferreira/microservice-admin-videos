@@ -52,7 +52,7 @@ class BuilderVideo implements Builder
         }
     }
 
-    public function addMediaVideo(string $path, MediaStatus $status): Builder
+    public function addMediaVideo(string $path, MediaStatus $mediaStatus, string $encodedPath = ''): Builder
     {
         $media = new Media(
             filePath: $path,
