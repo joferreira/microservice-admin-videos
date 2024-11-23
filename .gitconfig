@@ -1,4 +1,4 @@
 [http]
 	sslverify = false
 [credential]
-	helper = "!f() { /var/www/.vscode-server/bin/e8653663e8840adaf45af01eab5c627a5af81807/node /tmp/vscode-remote-containers-c601a4a1-43ec-4d14-b3b6-fbb79273337c.js git-credential-helper $*; }; f"
+	helper = "!f() { /var/www/.vscode-server/bin/f1a4fb101478ce6ec82fe9627c43efbf9e98c813/node /tmp/vscode-remote-containers-4fb42e99-21fe-4840-9dee-0d7bf7ee115e.js git-credential-helper $*; }; f"

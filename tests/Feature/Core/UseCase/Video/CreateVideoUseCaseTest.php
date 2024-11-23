@@ -3,8 +3,10 @@
 namespace Tests\Feature\Core\UseCase\Video;
 
 use Core\Domain\Enum\Rating;
-use Core\UseCase\Video\Create\CreateVideoUseCase;
-use Core\UseCase\Video\Create\DTO\CreateInputVideoDTO;
+use Core\UseCase\Video\Create\{
+    CreateVideoUseCase,
+    DTO\CreateInputVideoDTO
+};
 
 class CreateVideoUseCaseTest extends BaseVideoUseCase
 {
